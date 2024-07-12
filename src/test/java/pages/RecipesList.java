@@ -41,13 +41,12 @@ public class RecipesList extends BaseTest{
 			//To iterate over pages based on page number index in a specific alphabet
 			List<WebElement> pageNumberIndex= driver.findElements(By.xpath("(//div[@style='text-align:right;padding-bottom:15px;'])[1]/a"));
 			String lastIndex=driver.findElement(By.xpath("(//div[@style='text-align:right;padding-bottom:15px;'])[1]/a[last()]")).getAttribute("href");//.substring(52);
-
 					System.out.println("print the number lastindex: "+lastIndex);
 					System.out.println("print the number lastindex after substring: "+lastIndex.substring(66));		
 		    int lastPageIndex = Integer.parseInt(lastIndex.substring(66));
-			for (int j=0; j<lastPageIndex; j++) { 
-				
-				String pageIndexUrl=pageNumberIndex.get(j).getAttribute("href");
+			for (int j=1; j<=lastPageIndex; j++) { 
+				String pageIndexUrl= driver.findElement(By.linkText(""+j+"")).getAttribute("href");
+				//String pageIndexUrl=pageNumberIndex.get(j).getAttribute("href");
 				System.out.println("Print the page index url :"+pageIndexUrl);
 				driver.navigate().to(pageIndexUrl);
 				
@@ -68,5 +67,6 @@ public class RecipesList extends BaseTest{
 			alphabeticalIndex =driver.findElements(By.xpath("//table/tbody/tr/td[@onmouseover='Menu_HoverStatic(this)']"));
 		}
 		driver.quit();
+		
 	}
 }
