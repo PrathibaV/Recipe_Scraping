@@ -66,9 +66,13 @@ public class BaseTest {
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
 	     driver.get(prop.getProperty("URL"));
 
+
 		return driver;
   }
 		
+
+	
+
 
 //	@AfterMethod(alwaysRun=true)
 //	
@@ -81,8 +85,6 @@ public class BaseTest {
 
 
 
+
 }
-	
-
-
 
