@@ -18,6 +18,7 @@ import base.BaseTest;
 public class RecipeScraper extends BaseTest {
 	WebDriver driver;
 	RecipeDataExtraction recipeDataExtraction=new RecipeDataExtraction();
+	int count;
 	
 	public RecipeScraper() throws IOException {
 		driver=BaseTest.initializeDriver();
@@ -38,7 +39,7 @@ public class RecipeScraper extends BaseTest {
 		List<String> recipeUrlList = new ArrayList<String>();
 
 		//To iterate over pages based on Alphabetical index
-		for (int i=1; i<3; i++) { //(alphabeticalIndex.size()-1)
+		for (int i=1; i<(alphabeticalIndex.size()-1); i++) { 
 			String alphabet= alphabeticalIndex.get(i).getText();
 			Document document = Jsoup.connect(alphabeticIndexUrl+alphabet).get();
 			
@@ -48,7 +49,7 @@ public class RecipeScraper extends BaseTest {
 					System.out.println("print the number lastindex: "+lastIndex);
 					System.out.println("print the number lastindex after substring: "+lastIndex.substring(40));		
 		    int lastPageIndex = Integer.parseInt(lastIndex.substring(40));
-			for (int j=1; j<=lastPageIndex; j++) { //lastPageIndex
+			for (int j=1; j<=lastPageIndex; j++) { 
 				String pageIndexUrl= document.selectXpath("(//a[text()='"+j+"'])[1]").attr("href");//
 				//String pageIndexUrl=pageNumberIndex.get(j).getAttribute("href");
 				System.out.println("Print the page index url :"+getUrl()+pageIndexUrl);
@@ -59,7 +60,7 @@ public class RecipeScraper extends BaseTest {
 				List<Element> recipeCardList=document1.select(".rcc_recipename");
 				System.out.println("Size of the recipe list :"+recipeCardList.size());
 				
-				for (int y=0; y<2;y++) { //recipeCardList.size()
+				for (int y=0; y<recipeCardList.size();y++) { 
 					String recipeHrefUrl=recipeCardList.get(y).select("a").attr("href");
 					System.out.println("Print the href of recipes before adding to list: "+getUrl()+recipeHrefUrl);
 					try {
@@ -69,6 +70,8 @@ public class RecipeScraper extends BaseTest {
 					}
 					//recipeUrlList.add(recipeHrefUrl);
 					//System.out.println("Print the href of recipes: "+recipeUrlList);
+					count++;
+					System.out.println("Count: "+count++);
 				}		
 				
 				//pageNumberIndex= document.selectXpath("(//div[@style='text-align:right;padding-bottom:15px;'])[1]/a");
