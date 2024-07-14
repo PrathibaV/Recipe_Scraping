@@ -16,15 +16,27 @@ import org.testng.annotations.AfterMethod;
 
 public class BaseTest {
 	public static WebDriver driver;
+	static Properties prop;
+	static String url;
 	
-
-	public static WebDriver initializeDriver() throws IOException
+	public static Properties init_properties() throws IOException {
+		prop = new Properties();
+		FileInputStream fis = new FileInputStream("src/test/resources/Config.properties");
+		prop.load(fis);
+		return prop;
+	}
+	
+	public static String getUrl() {
+		url= prop.getProperty("URL");
+		return url;
+	}
+	
+	public static WebDriver initializeDriver() throws IOException 
 
 	{
 		// properties class
-		Properties prop = new Properties();
-		FileInputStream fis = new FileInputStream("src/test/resources/Config.properties");
-		prop.load(fis);	
+		init_properties();		
+
 		String browserName = System.getProperty("browser")!=null ? System.getProperty("browser") :prop.getProperty("browser");
 		//prop.getProperty("browser");
 		if (browserName.contains("chrome")) {
@@ -40,7 +52,7 @@ public class BaseTest {
 			options.addArguments("blink-settings=imagesEnabled=false");
 			}		
 			driver = new ChromeDriver(options);
-			
+
 		} else if (browserName.equalsIgnoreCase("firefox")) {
 			FirefoxOptions options = new FirefoxOptions();
 
@@ -59,12 +71,8 @@ public class BaseTest {
 
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.manage().window().maximize();
-
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
-	    driver.get(prop.getProperty("URL"));
-
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-	     driver.get(prop.getProperty("URL"));
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+	  driver.get(getUrl());
 
 		return driver;
   }
