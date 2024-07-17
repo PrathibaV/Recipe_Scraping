@@ -1,4 +1,4 @@
-package pages;
+package utilities;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,72 +13,114 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import base.BaseTest;
-import utilities.ReadExcel;
-import utilities.RecipeDataExtraction;
-import utilities.RecipeScraper;
 
-public class RecipesFilterer  {
-	private List<Map<String,String>> scrapedDataMappedList= new  ArrayList<>();
+public class RecipesFilterer {
+	private List<Map<String, String>> scrapedDataMappedList = new ArrayList<>();
 	ReadExcel readExcel = new ReadExcel();
 	int count;
-	
-		public void LFVEliminatedRecipes(Map<String, String> recipe) throws IOException {
-		//RecipeScraper recipeScraper = new RecipeScraper();;
 
-		List<String> LFVEliminateIngredients= readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ",0);
-		List<String> LFVRecipesToAvoidIngredients= readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ",3);
+	public void LFVEliminatedRecipes(Map<String, String> recipe) {
+		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 0);
+		List<String> lfvRecipesToAvoidIngredients = readExcel
+				.getRecipeFilterItemsList("Final list for LFV Elimination ", 3);
 
-		//System.out.println("######################### Excel LFVEliminateIngredients: "+LFVEliminateIngredients);
-		//System.out.println("######################### Excel LFVRecipesToAvoidIngredients: "+LFVRecipesToAvoidIngredients);
-
-		//scrapedDataMappedList = recipeScraper.getScrapedDataMappedList();
-		System.out.println("********************** LFVeliminate received the recipe: "+recipe);
-		List<Map<String,String>> eliminatedRecipesList = new ArrayList();
-		//List<Map<String,String>> recipesAfterEliminationList = new ArrayList();
-
-		//Iterate through scrapedDataMappedList to get the ingredients and then filter the recipes
-		//for (Map<String,String> recipeMappedData: scrapedDataMappedList) {
-			String recipeIngredients= recipe.get("Ingredients");
-			String recipeName= recipe.get("Recipe Name");
-			
-			boolean eliminateRecipe = false;
-			boolean avoidRecipe = false;
-			
-			// Compare recipeIngredients with LFVEliminateIngredients
-		    for (String ingredient : LFVEliminateIngredients) {
-		        if (recipeIngredients.contains(ingredient)) {
-		        	eliminateRecipe = true;
-		            break;
-		        }
-		    }
-
-		    // Compare recipeName with LFVRecipesToAvoidIngredients
-		    for (String avoidItem : LFVRecipesToAvoidIngredients) {
-		        String[] avoidWords = avoidItem.split(" "); 
-
-		        // Check if any word in avoidItem is a substring of recipeName		       
-		        for (String word : avoidWords) {
-		            if (recipeName.contains(word)) {
-		            	avoidRecipe = true;
-		                break;
-		            }
-		        }
-
-		        if (avoidRecipe) {
-		            break;
-		        }
-		    }
-
-		    // If either flag is true, add it to eliminatedRecipesList
-		    if (eliminateRecipe || avoidRecipe) {
-		    	eliminatedRecipesList.add(recipe);
-				System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$ The eliminated recipe for LFV is: "+recipe);
-		    }
-		    
-			System.out.println("The number of eliminated recipes for LFV are: "+eliminatedRecipesList.size());
+		String recipeIngredients = recipe.get("Ingredients");
+		String recipeName = recipe.get("Recipe Name");
+		if (isEliminateIngredientsPresent(lfvEliminateIngredients, recipeIngredients)
+				|| isAvoidItemsPresent(lfvRecipesToAvoidIngredients, recipeName)) {
+			System.out.println(
+					"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ The eliminated recipe for LFV is: "
+							+ recipe);
 		}
-		
+	}
 
-	}		
+	public void LCHFEliminatedRecipes(Map<String, String> recipe) throws IOException {
+		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ",
+				0);
+		List<String> lchfRecipesToAvoidIngredients = readExcel
+				.getRecipeFilterItemsList("Final list for LCHFElimination ", 2);
 
-	
+		String recipeIngredients = recipe.get("Ingredients");
+		String recipeName = recipe.get("Recipe Name");
+
+		if (isEliminateIngredientsPresent(lchfEliminateIngredients, recipeIngredients)
+				|| isAvoidItemsPresent(lchfRecipesToAvoidIngredients, recipeName)) {
+			System.out.println(
+					"#################################################################### The eliminated recipe for LCHF is: "
+							+ recipe);
+		}
+	}
+
+	public void LFVAddRecipes(Map<String, String> recipe) throws IOException {
+		List<String> lfvAddIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 1);
+		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 0);
+		List<String> lfvRecipesToAvoidIngredients = readExcel
+				.getRecipeFilterItemsList("Final list for LCHFElimination ", 3);
+
+		String recipeIngredients = recipe.get("Ingredients");
+		String recipeName = recipe.get("Recipe Name");
+
+		if (!isEliminateIngredientsPresent(lfvEliminateIngredients, recipeIngredients)
+				&& !isAvoidItemsPresent(lfvRecipesToAvoidIngredients, recipeName)) {
+			if (isAddIngredientsPresent(lfvAddIngredients, recipeIngredients)) {
+				System.out.println(
+						"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ The to add recipe for LFV is: "
+								+ recipe);
+			}
+		}
+	}
+
+	public void LCHFAddRecipes(Map<String, String> recipe) throws IOException {
+		List<String> lchfAddIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ", 1);
+		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ",
+				0);
+		List<String> lchfRecipesToAvoidIngredients = readExcel
+				.getRecipeFilterItemsList("Final list for LCHFElimination ", 2);
+
+		String recipeIngredients = recipe.get("Ingredients");
+		String recipeName = recipe.get("Recipe Name");
+
+		if (!isEliminateIngredientsPresent(lchfEliminateIngredients, recipeIngredients)
+				&& !isAvoidItemsPresent(lchfRecipesToAvoidIngredients, recipeName)) {
+			if (isAddIngredientsPresent(lchfAddIngredients, recipeIngredients)) {
+				System.out.println(
+						"********************************************************************************** The to add recipe for LCHF is: "
+								+ recipe);
+			}
+		}
+	}
+
+	public boolean isEliminateIngredientsPresent(List<String> elimnatedIngredients, String recipeIngredients) {
+		recipeIngredients = recipeIngredients.toLowerCase();
+		for (String elimnatedIngredient : elimnatedIngredients) {
+			elimnatedIngredient = elimnatedIngredient.toLowerCase();
+			if (recipeIngredients.contains(elimnatedIngredient)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isAvoidItemsPresent(List<String> avoidItems, String recipeName) {
+		recipeName = recipeName.toLowerCase();
+		for (String avoidItem : avoidItems) {
+			avoidItem = avoidItem.toLowerCase();
+			if (recipeName.contains(avoidItem)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isAddIngredientsPresent(List<String> addIngredients, String recipeIngredients) {
+		recipeIngredients = recipeIngredients.toLowerCase();
+		for (String addIngredient : addIngredients) {
+			addIngredient = addIngredient.toLowerCase();
+			if (recipeIngredients.contains(addIngredient)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+}
