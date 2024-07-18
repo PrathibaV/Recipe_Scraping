@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>TestNG Report</title>
+<style type="text/css">table {margin-bottom:10px;border-collapse:collapse;empty-cells:show}th,td {border:1px solid #009;padding:.25em .5em}th {vertical-align:bottom}td {vertical-align:top}table a {font-weight:bold}.stripe td {background-color: #E6EBF9}.num {text-align:right}.passedodd td {background-color: #3F3}.passedeven td {background-color: #0A0}.skippedodd td {background-color: #DDD}.skippedeven td {background-color: #CCC}.failedodd td,.attn {background-color: #F33}.failedeven td,.stripe .attn {background-color: #D00}.stacktrace {white-space:pre;font-family:monospace}.totop {font-size:85%;text-align:center;border-bottom:2px solid #000}.invisible {display:none}</style>
+</head>
+<body>
+<table>
+<tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
+<tr><th colspan="8">Default suite</th></tr>
+<tr><td><a href="#t0">Default test</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">460,926</td><td></td><td></td></tr>
+</table>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">utilities.RecipeScraper</td><td><a href="#m0">recipeScraperWithJsoup</a></td><td rowspan="1">1721250824933</td><td rowspan="1">460789</td></tr></tbody>
+</table>
+<h2>Default test</h2><h3 id="m0">utilities.RecipeScraper#recipeScraperWithJsoup</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:278)
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:304)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:346)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:796)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1099)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:489)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:483)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70)
+	at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1461)
+	at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:1066)
+	at java.base/java.io.BufferedInputStream.fill(BufferedInputStream.java:291)
+	at java.base/java.io.BufferedInputStream.read1(BufferedInputStream.java:347)
+	at java.base/java.io.BufferedInputStream.implRead(BufferedInputStream.java:420)
+	at java.base/java.io.BufferedInputStream.read(BufferedInputStream.java:399)
+	at java.base/sun.net.www.http.HttpClient.parseHTTPHeader(HttpClient.java:827)
+	at java.base/sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:759)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1690)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1599)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:531)
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:856)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:818)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:346)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:331)
+	at utilities.RecipeScraper.recipeScraperWithJsoup(RecipeScraper.java:62)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:677)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:221)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:50)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:969)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:194)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.testng.TestRunner.privateRun(TestRunner.java:829)
+	at org.testng.TestRunner.run(TestRunner.java:602)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:437)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:431)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:391)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:330)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1256)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1176)
+	at org.testng.TestNG.runSuites(TestNG.java:1099)
+	at org.testng.TestNG.run(TestNG.java:1067)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+</body>
+</html>

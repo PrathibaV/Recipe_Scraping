@@ -1,31 +1,38 @@
 package utilities;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
-
 import base.BaseTest;
+import entity.Recipe;
+import pages.LCHFAddon;
+
 
 public class RecipeScraper extends BaseTest {
 	WebDriver driver;
-	RecipeDataExtraction recipeDataExtraction=new RecipeDataExtraction();
+	LCHFAddon lchfaddon =new LCHFAddon();
 	
 	public RecipeScraper() throws IOException {
 		driver=BaseTest.initializeDriver();
 	}
 	
+	public static Connection getDBConenction() {
+		return DbConnection.connectToDb("postgres", "scrap_user", "pasword123");
+	}
 	
 	@Test
 	public void recipeScraperWithJsoup() throws InterruptedException, IOException {
+		
+		Connection conn = getDBConenction();
 		
 		//To click Recipe A to Z link
 		driver.findElement(By.xpath("//*[@title='Recipea A to Z']")).click();
@@ -38,7 +45,7 @@ public class RecipeScraper extends BaseTest {
 		List<String> recipeUrlList = new ArrayList<String>();
 
 		//To iterate over pages based on Alphabetical index
-		for (int i=1; i<3; i++) { //(alphabeticalIndex.size()-1)
+		for (int i=1; i<(alphabeticalIndex.size()-1); i++) { //(alphabeticalIndex.size()-1)
 			String alphabet= alphabeticalIndex.get(i).getText();
 			Document document = Jsoup.connect(alphabeticIndexUrl+alphabet).get();
 			
@@ -59,11 +66,17 @@ public class RecipeScraper extends BaseTest {
 				List<Element> recipeCardList=document1.select(".rcc_recipename");
 				System.out.println("Size of the recipe list :"+recipeCardList.size());
 				
-				for (int y=0; y<2;y++) { //recipeCardList.size()
+				
+				
+				for (int y=0; y<recipeCardList.size();y++) { //recipeCardList.size()
 					String recipeHrefUrl=recipeCardList.get(y).select("a").attr("href");
 					System.out.println("Print the href of recipes before adding to list: "+getUrl()+recipeHrefUrl);
 					try {
-						recipeDataExtraction.recipeData(getUrl()+recipeHrefUrl);
+						Recipe recipe = lchfaddon.recipeData(getUrl()+recipeHrefUrl);
+						if(recipe != null) {							
+							DbConnection.insertRecipe(conn, recipe);							
+						}
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -79,4 +92,8 @@ public class RecipeScraper extends BaseTest {
 		driver.quit();
 		
 	}
+	
+	
+	
+	
 }
