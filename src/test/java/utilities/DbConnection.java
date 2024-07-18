@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class DbConnection {
 	public Connection DbSetup() {
-		Connection conn= connectToDb("postgres","postgres","password");
+		Connection conn= connectToDb("recipescrapping","postgres","password");
 		createTable(conn, "lfv_recipes_without_eliminateitems");
 		createTable(conn, "lchf_recipes_without_eliminateitems");
 		createTable(conn, "lfv_recipes_with_addon_items");
@@ -24,7 +24,7 @@ public class DbConnection {
 		createTable(conn, "lfv_recipes_allergy_pistachio");
 		
 		createTable(conn, "lchf_recipes_allergy_hazelnut");
-		createTable(conn, "lchfF_recipes_allergy_sesame");
+		createTable(conn, "lchf_recipes_allergy_sesame");
 		createTable(conn, "lchf_recipes_allergy_walnut");
 		createTable(conn, "lchf_recipes_allergy_almond");
 		createTable(conn, "lchf_recipes_allergy_cashew");

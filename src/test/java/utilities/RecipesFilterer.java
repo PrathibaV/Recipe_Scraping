@@ -42,8 +42,7 @@ public class RecipesFilterer {
 	}
 
 	public void LCHFEliminatedRecipes(Map<String, String> recipe)  {
-		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ",
-				0);
+		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ", 0);
 		List<String> lchfRecipesToAvoidIngredients = readExcel
 				.getRecipeFilterItemsList("Final list for LCHFElimination ", 2);
 
@@ -62,7 +61,7 @@ public class RecipesFilterer {
 		List<String> lfvAddIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 1);
 		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 0);
 		List<String> lfvRecipesToAvoidIngredients = readExcel
-				.getRecipeFilterItemsList("Final list for LCHFElimination ", 3);
+				.getRecipeFilterItemsList("Final list for LFV Elimination ", 3);
 
 		String recipeIngredients = recipe.get("Ingredients");
 		String recipeName = recipe.get("Recipe Name");
@@ -98,10 +97,10 @@ public class RecipesFilterer {
 	}
 	
 	public void LFVAllergicIngredientsRecipes(Map<String, String> recipe) {
-		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFVElimination ",
+		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ",
 				0);
 		List<String> lfvRecipesToAvoidIngredients = readExcel
-				.getRecipeFilterItemsList("Final list for LFVElimination ", 2);
+				.getRecipeFilterItemsList("Final list for LFV Elimination ", 3);
 
 		String recipeIngredients = recipe.get("Ingredients").toLowerCase();
 		String recipeName = recipe.get("Recipe Name").toLowerCase();
@@ -150,7 +149,7 @@ public class RecipesFilterer {
 				DbConnection.insertRow(conn,"lchf_recipes_allergy_hazelnut",recipe);
 			}
 			else if (recipeIngredients.contains("sesame")) {				
-				DbConnection.insertRow(conn,"lchfF_recipes_allergy_sesame",recipe);
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_sesame",recipe);
 			}
 			else if (recipeIngredients.contains("walnut")) {				
 				DbConnection.insertRow(conn,"lchf_recipes_allergy_walnut",recipe);

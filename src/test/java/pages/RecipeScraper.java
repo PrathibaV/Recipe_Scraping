@@ -68,7 +68,7 @@ import utilities.RecipesFilterer;
 			lastIndex = lastIndex.substring(lastIndex.indexOf("pageindex=") + 10);
 			int noOfPages = Integer.parseInt(lastIndex);
 			
-			for (int j=1; j<=noOfPages; j++) { //noOfPages
+			for (int j=0; j<=noOfPages; j++) { //noOfPages
 				String pageIndexUrl= document.selectXpath("(//a[text()='"+j+"'])[1]").attr("href");//
 				
 				Document document1;
@@ -81,6 +81,7 @@ import utilities.RecipesFilterer;
 				
 				for (int y=0; y<recipeCardList.size();y++) { //recipeCardList.size()
 					String recipeHrefUrl=recipeCardList.get(y).select("a").attr("href");
+					System.out.println("Href url of the recipe: "+recipeHrefUrl);
 					Map<String, String>dataMappedToHeader= recipeDataExtraction.recipeData(getUrl()+recipeHrefUrl); //getUrl()+recipeHrefUrl
 					
 					  recipesFilterer.LFVEliminatedRecipes(dataMappedToHeader);
