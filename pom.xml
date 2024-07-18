@@ -25,6 +25,31 @@
 
 	</build>
 	<dependencies>
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-api</artifactId>
+		    <version>3.0.0-beta1</version>
+		</dependency>
+		    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>3.0.0-beta1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-simple</artifactId>
+		    <version>2.1.0-alpha0</version>
+		    <scope>test</scope>
+		</dependency> 
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>2.1.0-alpha1</version>
+		</dependency>
 		<!--https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -35,36 +60,39 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>7.10.2</version>
+			<version>7.5.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
-<dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi</artifactId>
-    <version>5.3.0</version>
-</dependency>
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>5.3.0</version>
+		</dependency>
 
 
-<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
-<dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi-ooxml</artifactId>
-    <version>5.3.0</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-<dependency>
-   <groupId>org.apache.logging.log4j</groupId>
-   <artifactId>log4j-core</artifactId>
-   <version>2.22.1</version>
-</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>5.3.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		
+
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.17.2</version>
 		</dependency>
+<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.7.3</version>
+</dependency>
 
 
 	</dependencies>

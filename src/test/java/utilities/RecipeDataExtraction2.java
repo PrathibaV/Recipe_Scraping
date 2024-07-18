@@ -1,53 +1,33 @@
 package utilities;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Test;
+import pages.Recipe;
 
-import base.BaseTest;
+public class RecipeDataExtraction2 {
+	List<String> recipeCategoryCheckList = Arrays.asList("breakfast","lunch","snacks","dinner");
+	List<String> foodCategoryCheckList = Arrays.asList("vegetarian","vegan","non-veg","jain");
+	List<String> cuisineCategoryCheckList = Arrays.asList("gujarati","punjabi","rajasthani","maharashtrian","south indian","italian","chinese","indian");
 
-public class RecipeDataExtraction {
-	//WebDriver driver;
-	List<String> recipeCategoryCheckList = Arrays.asList("Breakfast","Lunch","Snacks","Dinner");
-	List<String> foodCategoryCheckList = Arrays.asList("Vegetarian","Vegan","Non-Veg");
-	List<String> cuisineCategoryCheckList = Arrays.asList("Indian");
-
-	/*
-	 * public CommonMethods(WebDriver driver ) throws IOException {
-	 * driver=BaseTest.initializeDriver(); } 
-	 */
-	
-
-	@Test
-	public void recipeData(String url) throws IOException {
+	public Recipe recipeData(String url) throws IOException {
 		//String url = "https://www.tarladalal.com/dal-khichdi-39570r";
 		
 			Document document = Jsoup.connect(url).get();
 			
-			//Recipe ID
+			Recipe recipeObj = new Recipe();						
+			
+		//Recipe ID
 		String recipeId=document.selectXpath("//form[@name='aspnetForm']").attr("action").split("recipeid=")[1];
-		System.out.println("Recipe Id is: "+recipeId);
+		recipeObj.setRecipeID(Integer.parseInt(recipeId));
 		
 		//Recipe Name
 		String recipeName=document.getElementById("ctl00_cntrightpanel_lblRecipeName").text();
-		System.out.println("Recipe name is: "+recipeName);
+		recipeObj.setRecipeName(recipeName);
 				
 		//Ingredients
 		int ingreSize = document.selectXpath("//span[@itemprop='recipeIngredient']").size();
@@ -56,16 +36,16 @@ public class RecipeDataExtraction {
 			String eachIngrednt = document.selectXpath("//span[@itemprop='recipeIngredient'][" + k + "]").text();
 			ingredients = ingredients + eachIngrednt + "|";
 		}
-		System.out.println("Ingredients are: "+ingredients);
+		recipeObj.setIngredients(ingredients);
 
 		//Preparation time
 		String prepTime = document.selectXpath("//time[@itemprop='prepTime']").text();
-		System.out.println("Preparation time is: "+prepTime);
+		recipeObj.setPreparationTime(prepTime);
 		
 		//Cooking time
 		String cookTime = document.selectXpath("//time[@itemprop='cookTime']").text();
-		System.out.println("Cooking time is: "+cookTime);
-		
+		recipeObj.setCookingTime(cookTime);
+
 		//Tags
 		List<Element> recipeTagList=document.selectXpath("//div[@id='recipe_tags']/a/span");
 		String tags= ""; 
@@ -76,14 +56,14 @@ public class RecipeDataExtraction {
 		if (!tags.isEmpty()) {
 			tags = tags.substring(0, tags.length() - 1);
 		}
-		System.out.println("Tags are: "+tags);
-		
+		recipeObj.setTag(tags);  
+
 		//Recipe category
-				String recipeCategoryNames="";
+		String recipeCategoryNames="";
 		for (Element recipeTagName: recipeTagList) {
 			for (String recipeCategory : recipeCategoryCheckList) {
-				if (recipeTagName.text().contains(recipeCategory)) {
-					 if (!recipeCategoryNames.contains(recipeCategory + "|")) {
+				if (recipeTagName.text().toLowerCase().contains(recipeCategory.toLowerCase())) {
+					 if (!recipeCategoryNames.toLowerCase().contains(recipeCategory.toLowerCase() + "|")) {
 			                recipeCategoryNames = recipeCategoryNames + recipeCategory + "|";
 			            }
 					 break;
@@ -93,14 +73,14 @@ public class RecipeDataExtraction {
 		if (!recipeCategoryNames.isEmpty()) {
 		    recipeCategoryNames = recipeCategoryNames.substring(0, recipeCategoryNames.length() - 1);
 		}
-		System.out.println("The recipe category is: "+recipeCategoryNames);
+		recipeObj.setRecipeCategory(recipeCategoryNames);
 					
 		//Food category
 		String foodCategoryNames="";
 		for (Element recipeTagElement : recipeTagList) {		    		    
 		    for (String foodCategory : foodCategoryCheckList) {
-		        if (recipeTagElement.text().contains(foodCategory)) {
-		        	if (!foodCategoryNames.contains(foodCategory + "|")) {
+		        if (recipeTagElement.text().toLowerCase().contains(foodCategory.toLowerCase())) {
+		        	if (!foodCategoryNames.toLowerCase().contains(foodCategory.toLowerCase() + "|")) {
 		        		foodCategoryNames = foodCategoryNames + foodCategory + "|";
 		            }		            
 		        	break; 
@@ -110,18 +90,17 @@ public class RecipeDataExtraction {
 		if (!foodCategoryNames.isEmpty()) {
 			foodCategoryNames = foodCategoryNames.substring(0, foodCategoryNames.length() - 1);
 		}
-		System.out.println("The food category is: "+foodCategoryNames);
-	
-	//No of servings
+		recipeObj.setFoodCategory(foodCategoryNames);            
+	  //No of servings
 		String noOfServings = document.selectXpath("//span[@itemprop='recipeYield']").text();
-		System.out.println("No of servings is: "+noOfServings);
+		recipeObj.setServings(noOfServings);
 		
 		//Cuisine category
 		String cuisineCategoryNames="";
 		for (Element recipeTagName: recipeTagList) {
 			for (String cuisineCategory : cuisineCategoryCheckList) {
-				if (recipeTagName.text().contains(cuisineCategory)) {
-					if (!cuisineCategoryNames.contains(cuisineCategory + "|")) {
+				if (recipeTagName.text().toLowerCase().contains(cuisineCategory.toLowerCase())) {
+					if (!cuisineCategoryNames.toLowerCase().contains(cuisineCategory.toLowerCase() + "|")) {
 						cuisineCategoryNames = cuisineCategoryNames + cuisineCategory + "|";
 		            }
 		        	break; 
@@ -131,22 +110,20 @@ public class RecipeDataExtraction {
 		if (!cuisineCategoryNames.isEmpty()) {
 			cuisineCategoryNames = cuisineCategoryNames.substring(0, cuisineCategoryNames.length() - 1);
 		}
-    	System.out.println("The cuisine category is: "+cuisineCategoryNames);		            
-
+    	recipeObj.setCuisineCategory(cuisineCategoryNames);
 		
 		//Recipe Description
     	String recDescrptn = document.getElementById("ctl00_cntrightpanel_lblDesc").text();
-		System.out.println("Recipe description is: "+recDescrptn);
-		
+    	recipeObj.setRecipeDescription(recDescrptn);
+
 		//Preparation method
     	List<Element> methodList = document.selectXpath("//div[@id='recipe_small_steps']/span/ol/li");
     	String prepMethods = "";
 		for (Element methods : methodList) {
 			prepMethods = prepMethods + methods.text() + "\n";
 		}
-		System.out.println("Preparation method is: "+prepMethods);
-		
-		
+		recipeObj.setPreparationMethod(prepMethods);
+
 		//Nutrient values
 		List<String> nutrientList = new ArrayList<String>();
 		int rows = document.selectXpath("//table[@id='rcpnutrients']//tr").size();
@@ -164,12 +141,13 @@ public class RecipeDataExtraction {
 		for (String nutrients : nutrientList) {
 			nutrientVal = nutrientVal+nutrients+"|";
 		}
-		System.out.println("Nutrient value is: "+nutrientVal);
-
+		recipeObj.setNutrientValues(nutrientVal);
 		
 		//Recipe url
 		System.out.println("Recipe url is: "+url);
+		recipeObj.setRecipeURL(url);
 		
+		return recipeObj;
 	}		
 }
 	

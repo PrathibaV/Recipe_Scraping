@@ -17,7 +17,7 @@ import base.BaseTest;
 
 public class RecipeScraper extends BaseTest {
 	WebDriver driver;
-	RecipeDataExtraction recipeDataExtraction=new RecipeDataExtraction();
+	RecipeDataExtraction2 recipeDataExtraction=new RecipeDataExtraction2();
 	
 	public RecipeScraper() throws IOException {
 		driver=BaseTest.initializeDriver();
@@ -64,7 +64,7 @@ public class RecipeScraper extends BaseTest {
 					System.out.println("Print the href of recipes before adding to list: "+getUrl()+recipeHrefUrl);
 					try {
 						recipeDataExtraction.recipeData(getUrl()+recipeHrefUrl);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					//recipeUrlList.add(recipeHrefUrl);
