@@ -1,6 +1,7 @@
 package utilities;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,10 +22,13 @@ public class ReadExcel {
 	//List<String> currCelValue= new ArrayList();
 	
 	@Test	
-	public synchronized List<String> getRecipeFilterItemsList (String sheetname, int colNum) throws IOException { //String sheetname, int colNum //List<String>
+	public synchronized List<String> getRecipeFilterItemsList (String sheetname, int colNum) { //String sheetname, int colNum //List<String>
 		List<String> currCelValue= new ArrayList();
 		String path = System.getProperty("user.dir")+"/src/test/resources/IngredientsAndComorbidities.xlsx";
-		FileInputStream fis = new FileInputStream(path);
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(path);
+		
 		XSSFWorkbook workbook = new XSSFWorkbook(fis);
 		XSSFSheet sheet = workbook.getSheet(sheetname);
 		Iterator<Row> rows = sheet.rowIterator();
@@ -45,17 +49,13 @@ public class ReadExcel {
 
 	        workbook.close();
 	        fis.close();
+		 } catch (IOException e) {
+				e.printStackTrace();
+			}
 
-	        return currCelValue;
-		
-		/*
-		 * while (rows.hasNext()) { Row currRow = rows.next(); String data=
-		 * currRow.getCell(colNum).getStringCellValue(); if (!data.isEmpty()) {
-		 * currCelValue.add(data); } } System.out.println("Cell text: "+currCelValue);
-		 * workbook.close(); fis.close(); return currCelValue;
-		 */
-			// currCelValue.put(columnHeaders.get(i), dataList); 			 
-			  }
+	        return currCelValue;			 
+			 
+			}
 		  }
 		 
 			

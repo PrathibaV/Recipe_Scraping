@@ -27,7 +27,6 @@ import org.testng.annotations.Test;
 import base.BaseTest;
 
 public class RecipeDataExtraction {
-	//WebDriver driver;
 	ReadExcel readExcel = new ReadExcel();
 	List<String> recipeCategoryCheckList = readExcel.getRecipeFilterItemsList("Recipe Categories",2);
 	List<String> foodCategoryCheckList = readExcel.getRecipeFilterItemsList("Recipe Categories",0);
@@ -37,25 +36,21 @@ public class RecipeDataExtraction {
 		public Map<String, String> recipeData(String url) { //String url //Map<String, String>
 			Map<String,String> dataMappedToHeader = new LinkedHashMap<String, String>(); 
 
-		//String url = "https://www.tarladalal.com/aam-chana-achar-rajasthani-pickle-3904r";
 		//To collect the column headers as list
-		
+			
 			Document document;
-			try {
-				document = Jsoup.connect(url).get();
+			try {   
+
+	             document = Jsoup.connect(url).timeout(30 * 1000).get();
 			
 			
 			//Recipe ID
 		String recipeId=document.selectXpath("//form[@name='aspnetForm']").attr("action").split("recipeid=")[1];
-		//pojo.setRecipeId(recipeId);
-		//System.out.println("Recipe Id is: "+recipeId);
 		dataMappedToHeader.put("Recipe ID",recipeId);
 		
 				
 		//Recipe Name
-		String recipeName=document.getElementById("ctl00_cntrightpanel_lblRecipeName").text();
-		//System.out.println("Recipe name is: "+recipeName);
-		//pojo.setRecipeName(recipeName);	
+		String recipeName=document.getElementById("ctl00_cntrightpanel_lblRecipeName").text();	
 		dataMappedToHeader.put("Recipe Name",recipeName);
 		
 		
@@ -66,22 +61,16 @@ public class RecipeDataExtraction {
 			String eachIngrednt = document.selectXpath("//span[@itemprop='recipeIngredient'][" + k + "]").text();
 			ingredients = ingredients + eachIngrednt + "|";
 		}
-		//System.out.println("Ingredients are: "+ingredients);
-		//pojo.setIngredients(ingredients);
 		dataMappedToHeader.put("Ingredients",ingredients);
 				
 		
 		//Preparation time
 		String prepTime = document.selectXpath("//time[@itemprop='prepTime']").text();
-		//System.out.println("Preparation time is: "+prepTime);
-		//pojo.setPrepTime(prepTime);
 		dataMappedToHeader.put("Preparation Time",prepTime);
 		
 		
 		//Cooking time
 		String cookTime = document.selectXpath("//time[@itemprop='cookTime']").text();
-		//System.out.println("Cooking time is: "+cookTime);
-		//pojo.setCookTime(cookTime);
 		dataMappedToHeader.put("Cooking Time",cookTime);
 		
 		
@@ -95,8 +84,6 @@ public class RecipeDataExtraction {
 		if (!tags.isEmpty()) {
 			tags = tags.substring(0, tags.length() - 1);
 		}
-		//System.out.println("Tags are: "+tags);
-		//pojo.setTags(tags);
 		dataMappedToHeader.put("Tag",tags);
 		
 		
@@ -114,8 +101,6 @@ public class RecipeDataExtraction {
 		if (!recipeCategoryNames.isEmpty()) {
 		    recipeCategoryNames = recipeCategoryNames.substring(0, recipeCategoryNames.length() - 1);
 		}
-		//System.out.println("The recipe category is: "+recipeCategoryNames);
-		//pojo.setRecipeCategoryNames(recipeCategoryNames);
 		dataMappedToHeader.put("Recipe Category",recipeCategoryNames);
 		
 		
@@ -134,15 +119,11 @@ public class RecipeDataExtraction {
 		if (!foodCategoryNames.isEmpty()) {
 			foodCategoryNames = foodCategoryNames.substring(0, foodCategoryNames.length() - 1);
 		}
-		//System.out.println("The food category is: "+foodCategoryNames);
-		//pojo.setFoodCategoryNames(foodCategoryNames);
 		dataMappedToHeader.put("Food Category",foodCategoryNames);
 		
 		
 	//No of servings
 		String noOfServings = document.selectXpath("//span[@itemprop='recipeYield']").text();
-		//System.out.println("No of servings is: "+noOfServings);
-		//pojo.setNoOfServings(noOfServings);
 		dataMappedToHeader.put("No of servings",noOfServings);
 		
 		
@@ -161,15 +142,11 @@ public class RecipeDataExtraction {
 		if (!cuisineCategoryNames.isEmpty()) {
 			cuisineCategoryNames = cuisineCategoryNames.substring(0, cuisineCategoryNames.length() - 1);
 		}
-    	//System.out.println("The cuisine category is: "+cuisineCategoryNames);		            
-    	//pojo.setCuisineCategoryNames(cuisineCategoryNames);
     	dataMappedToHeader.put("Cuisine category",cuisineCategoryNames);
     	
     	
 		//Recipe Description
     	String recDescrptn = document.getElementById("ctl00_cntrightpanel_lblDesc").text();
-		//System.out.println("Recipe description is: "+recDescrptn);
-		//pojo.setRecDescrptn(recDescrptn);
 		dataMappedToHeader.put("Recipe Description",recDescrptn);
 		
 		
@@ -179,8 +156,6 @@ public class RecipeDataExtraction {
 		for (Element methods : methodList) {
 			prepMethods = prepMethods + methods.text() + "\n";
 		}
-		//System.out.println("Preparation method is: "+prepMethods);
-		//pojo.setPrepMethods(prepMethods);
 		dataMappedToHeader.put("Preparation method",prepMethods);
 		
 		
@@ -201,19 +176,14 @@ public class RecipeDataExtraction {
 		for (String nutrients : nutrientList) {
 			nutrientVal = nutrientVal+nutrients+"|";
 		}
-		//System.out.println("Nutrient value is: "+nutrientVal);
-		//pojo.setNutrientVal(nutrientVal);
 		dataMappedToHeader.put("Nutrient values",nutrientVal);
 		
 		
 		//Recipe url		
 		dataMappedToHeader.put("Recipe URL",url);
-		
-		//System.out.println("The mapped list: "+dataMappedToHeader);
-		
+
 	}
 		 catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			return dataMappedToHeader;

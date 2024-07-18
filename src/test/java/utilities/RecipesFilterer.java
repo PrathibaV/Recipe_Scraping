@@ -1,6 +1,7 @@
 package utilities;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,9 +16,15 @@ import org.testng.annotations.Test;
 import base.BaseTest;
 
 public class RecipesFilterer {
-	private List<Map<String, String>> scrapedDataMappedList = new ArrayList<>();
-	ReadExcel readExcel = new ReadExcel();
+	DbConnection db = new DbConnection();
+	private ReadExcel readExcel = new ReadExcel();
+	private Connection conn;
 	int count;
+	
+	public RecipesFilterer() {
+		this.conn= db.DbSetup();
+	}
+	
 
 	public void LFVEliminatedRecipes(Map<String, String> recipe) {
 		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 0);
@@ -26,15 +33,13 @@ public class RecipesFilterer {
 
 		String recipeIngredients = recipe.get("Ingredients");
 		String recipeName = recipe.get("Recipe Name");
-		if (isEliminateIngredientsPresent(lfvEliminateIngredients, recipeIngredients)
-				|| isAvoidItemsPresent(lfvRecipesToAvoidIngredients, recipeName)) {
-			System.out.println(
-					"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ The eliminated recipe for LFV is: "
-							+ recipe);
+		if (!isEliminateIngredientsPresent(lfvEliminateIngredients, recipeIngredients)
+				|| !isAvoidItemsPresent(lfvRecipesToAvoidIngredients, recipeName)) {			
+			DbConnection.insertRow(conn,"lfv_recipes_without_eliminateitems",recipe);
 		}
 	}
 
-	public void LCHFEliminatedRecipes(Map<String, String> recipe) throws IOException {
+	public void LCHFEliminatedRecipes(Map<String, String> recipe)  {
 		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ",
 				0);
 		List<String> lchfRecipesToAvoidIngredients = readExcel
@@ -43,15 +48,13 @@ public class RecipesFilterer {
 		String recipeIngredients = recipe.get("Ingredients");
 		String recipeName = recipe.get("Recipe Name");
 
-		if (isEliminateIngredientsPresent(lchfEliminateIngredients, recipeIngredients)
-				|| isAvoidItemsPresent(lchfRecipesToAvoidIngredients, recipeName)) {
-			System.out.println(
-					"#################################################################### The eliminated recipe for LCHF is: "
-							+ recipe);
+		if (!isEliminateIngredientsPresent(lchfEliminateIngredients, recipeIngredients)
+				&& !isAvoidItemsPresent(lchfRecipesToAvoidIngredients, recipeName)) {			
+			DbConnection.insertRow(conn,"lchf_recipes_without_eliminateitems",recipe);
 		}
 	}
 
-	public void LFVAddRecipes(Map<String, String> recipe) throws IOException {
+	public void LFVAddRecipes(Map<String, String> recipe) {
 		List<String> lfvAddIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 1);
 		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFV Elimination ", 0);
 		List<String> lfvRecipesToAvoidIngredients = readExcel
@@ -63,14 +66,12 @@ public class RecipesFilterer {
 		if (!isEliminateIngredientsPresent(lfvEliminateIngredients, recipeIngredients)
 				&& !isAvoidItemsPresent(lfvRecipesToAvoidIngredients, recipeName)) {
 			if (isAddIngredientsPresent(lfvAddIngredients, recipeIngredients)) {
-				System.out.println(
-						"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ The to add recipe for LFV is: "
-								+ recipe);
+				DbConnection.insertRow(conn,"lfv_recipes_with_addon_items",recipe);
 			}
 		}
 	}
 
-	public void LCHFAddRecipes(Map<String, String> recipe) throws IOException {
+	public void LCHFAddRecipes(Map<String, String> recipe) {
 		List<String> lchfAddIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ", 1);
 		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ",
 				0);
@@ -83,10 +84,82 @@ public class RecipesFilterer {
 		if (!isEliminateIngredientsPresent(lchfEliminateIngredients, recipeIngredients)
 				&& !isAvoidItemsPresent(lchfRecipesToAvoidIngredients, recipeName)) {
 			if (isAddIngredientsPresent(lchfAddIngredients, recipeIngredients)) {
-				System.out.println(
-						"********************************************************************************** The to add recipe for LCHF is: "
-								+ recipe);
+				DbConnection.insertRow(conn,"lchf_recipes_with_addon_items",recipe);
 			}
+		}
+	}
+	
+	public void LFVAllergicIngredientsRecipes(Map<String, String> recipe) {
+		List<String> lfvEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LFVElimination ",
+				0);
+		List<String> lfvRecipesToAvoidIngredients = readExcel
+				.getRecipeFilterItemsList("Final list for LFVElimination ", 2);
+
+		String recipeIngredients = recipe.get("Ingredients").toLowerCase();
+		String recipeName = recipe.get("Recipe Name").toLowerCase();
+
+		if (!isEliminateIngredientsPresent(lfvEliminateIngredients, recipeIngredients)
+				&& !isAvoidItemsPresent(lfvRecipesToAvoidIngredients, recipeName)) {
+			if (recipeIngredients.contains("hazelnut")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_hazelnut",recipe);
+			}
+			else if (recipeIngredients.contains("sesame")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_sesame",recipe);
+			}
+			else if (recipeIngredients.contains("walnut")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_walnut",recipe);
+			}
+			else if (recipeIngredients.contains("almond")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_almond",recipe);
+			}
+			else if (recipeIngredients.contains("cashew")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_cashew",recipe);
+			}
+			else if (recipeIngredients.contains("peanuts")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_pistachio",recipe);
+			}
+			else if (recipeIngredients.contains("pistachio")) {
+				DbConnection.insertRow(conn,"lfv_recipes_allergy_pistachio",recipe);
+			}
+			
+			
+		}
+	}
+	
+	public void LCHFAllergicIngredientsRecipes(Map<String, String> recipe) {
+		List<String> lchfEliminateIngredients = readExcel.getRecipeFilterItemsList("Final list for LCHFElimination ",
+				0);
+		List<String> lchfRecipesToAvoidIngredients = readExcel
+				.getRecipeFilterItemsList("Final list for LCHFElimination ", 2);
+
+		String recipeIngredients = recipe.get("Ingredients").toLowerCase();
+		String recipeName = recipe.get("Recipe Name").toLowerCase();
+
+		if (!isEliminateIngredientsPresent(lchfEliminateIngredients, recipeIngredients)
+				&& !isAvoidItemsPresent(lchfRecipesToAvoidIngredients, recipeName)) {
+			if (recipeIngredients.contains("hazelnut")) {				
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_hazelnut",recipe);
+			}
+			else if (recipeIngredients.contains("sesame")) {				
+				DbConnection.insertRow(conn,"lchfF_recipes_allergy_sesame",recipe);
+			}
+			else if (recipeIngredients.contains("walnut")) {				
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_walnut",recipe);
+			}
+			else if (recipeIngredients.contains("almond")) {
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_almond",recipe);
+			}
+			else if (recipeIngredients.contains("cashew")) {
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_cashew",recipe);
+			}
+			else if (recipeIngredients.contains("peanuts")) {
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_peanut",recipe);
+			}
+			else if (recipeIngredients.contains("pistachio")) {
+				DbConnection.insertRow(conn,"lchf_recipes_allergy_pistachio",recipe);
+			}
+			
+			
 		}
 	}
 
@@ -113,6 +186,17 @@ public class RecipesFilterer {
 	}
 
 	public boolean isAddIngredientsPresent(List<String> addIngredients, String recipeIngredients) {
+		recipeIngredients = recipeIngredients.toLowerCase();
+		for (String addIngredient : addIngredients) {
+			addIngredient = addIngredient.toLowerCase();
+			if (recipeIngredients.contains(addIngredient)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isAllergicIngredientsPresent(List<String> addIngredients, String recipeIngredients) {
 		recipeIngredients = recipeIngredients.toLowerCase();
 		for (String addIngredient : addIngredients) {
 			addIngredient = addIngredient.toLowerCase();
