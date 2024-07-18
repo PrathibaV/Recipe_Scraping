@@ -67,7 +67,27 @@ public class DbConnection {
 		}
 	}
 	
-	
+	public void insertRow(Connection conn, String tableName, Integer Recipe_ID, String Recipe_Name, 
+			String Recipe_Category, String Food_Category, String Ingredients, String Preparation_Time, String Cooking_Time, 
+			String Tag, String No_Of_Servings, String Cuisine_Category, String Recipe_Description, String Preparation_Method,
+			String Nutrient_Values, String Recipe_URL) {
+		Statement statement;
+		try {
+			String query =  String.format("insert into %s(Recipe_ID,Recipe_Name,Recipe_Category,Food_Category,Ingredients,Preparation_Time,"
+					+ "Cooking_Time,Tag,No_Of_Servings,Cuisine_Category,Recipe_Description,Preparation_Method,Nutrient_Values,Recipe_URL) values"
+					+ "(%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+					tableName,Recipe_ID,Recipe_Name,Recipe_Category,Food_Category,Ingredients,Preparation_Time,Cooking_Time,Tag,No_Of_Servings,
+					Cuisine_Category,Recipe_Description,Preparation_Method,Nutrient_Values,Recipe_URL);
+			statement = conn.createStatement();
+			statement.execute(query);
+			System.out.println("Row Inserted");
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+    
+
 	public static void insertRow(Connection conn, String tableName, Map<String, String> recipe) {
 		 PreparedStatement preparedStatement = null;
 		    try {
