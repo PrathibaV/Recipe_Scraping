@@ -144,7 +144,7 @@ public class RecipeDataExtraction2 {
 		recipeObj.setNutrientValues(nutrientVal);
 		
 		//Recipe url
-		System.out.println("Recipe url is: "+url);
+		//System.out.println("Recipe url is: "+url);
 		recipeObj.setRecipeURL(url);
 		
 		return recipeObj;
