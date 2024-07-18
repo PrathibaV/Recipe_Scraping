@@ -87,6 +87,9 @@ import utilities.RecipesFilterer;
 					  recipesFilterer.LCHFEliminatedRecipes(dataMappedToHeader);
 					  recipesFilterer.LFVAddRecipes(dataMappedToHeader);
 					  recipesFilterer.LCHFAddRecipes(dataMappedToHeader);
+					  recipesFilterer.LFVAllergicIngredientsRecipes(dataMappedToHeader);
+					  recipesFilterer.LCHFAllergicIngredientsRecipes(dataMappedToHeader);
+
 					System.out.println("Print the href of recipes: "+recipeUrlList);
 					count++;
 					System.out.println("Count: "+count);
