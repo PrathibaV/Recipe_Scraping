@@ -129,8 +129,9 @@ public class RecipesFilterer {
 			else if (recipeIngredients.contains("pistachio")) {
 				DbConnection.insertRow(conn,"lfv_recipes_allergy_pistachio",recipe);
 			}
-			
-			
+			else {
+		        System.out.println("The allergy ingredients are not present. Not inserting into database.");
+			}			
 		}
 	}
 	
